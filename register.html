@@ -700,11 +700,16 @@
 
       var priceEl = document.createElement('div');
       priceEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.9rem;color:var(--clay);margin-top:.3rem;';
-      priceEl.innerHTML = 'Single: <strong>$' + item.single + '</strong> &nbsp;·&nbsp; Double: <strong>$' + item.double + '</strong>';
+      priceEl.innerHTML = 'Single: <strong>$' + item.single + '</strong> &nbsp;·&nbsp; Double: <strong>$' + item.double + '</strong> for 2 people';
+
+      var includesEl = document.createElement('div');
+      includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.8rem;color:var(--clay);margin-top:.3rem;';
+      includesEl.textContent = 'Prices include the room for two nights, all meals from Friday evening to Sunday noon, and full retreat programming.';
 
       info.appendChild(nameEl);
       info.appendChild(descEl);
       info.appendChild(priceEl);
+      info.appendChild(includesEl);
 
       var badge = document.createElement('div');
       badge.style.cssText = 'flex-shrink:0;font-family:Crimson Pro,serif;font-size:.9rem;color:' + (soldOut ? 'var(--clay)' : (isSelected ? 'var(--clay)' : 'rgba(90,59,40,.4)')) + ';margin-left:1rem;';
