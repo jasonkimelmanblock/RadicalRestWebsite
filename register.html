@@ -189,11 +189,11 @@
   .form-divider { height:1px; background:var(--straw); margin:1.8rem 0; }
   .accom-section-title { font-family:'Crimson Pro',serif; font-size:.75rem; letter-spacing:.22em; text-transform:uppercase; color:var(--clay); margin-bottom:1rem; }
   .accom-grid { display:flex; flex-direction:column; gap:0; margin-bottom:1.5rem; }
-  .accom-row { display:grid; grid-template-columns:1fr auto; align-items:center; padding:1.1rem 1.2rem; border:1.5px solid var(--straw); border-top:none; background:var(--cream); gap:1.5rem; transition:background .2s; }
+  .accom-row { display:grid; grid-template-columns:1fr auto; align-items:center; padding:1.1rem 1.2rem; border:1.5px solid var(--straw); border-top:none; background:var(--cream); gap:1.5rem; transition:background .2s; min-height:160px; }
   .accom-row:first-child { border-top:1.5px solid var(--straw); }
   .accom-row.has-qty { background:#fdf5e8; border-color:var(--wheat); }
   .accom-name { font-family:'Lora',serif; font-size:1rem; color:var(--soil); font-weight:500; margin-bottom:.2rem; }
-  .accom-desc { font-family:'Crimson Pro',serif; font-size:.9rem; color:var(--bark); font-style:italic; }
+  .accom-desc { font-family:'Crimson Pro',serif; font-size:1.05rem; color:var(--bark); font-style:italic; }
   .accom-counter { display:flex; align-items:center; gap:0; flex-shrink:0; }
   .counter-btn { width:32px; height:32px; background:var(--white); border:1.5px solid var(--straw); color:var(--soil); font-size:1.2rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s,border-color .2s; font-family:'Crimson Pro',serif; padding:0; flex-shrink:0; }
   .counter-btn:hover { background:var(--straw); border-color:var(--clay); }
@@ -286,24 +286,28 @@
 
   .farm-exterior-photo { overflow:hidden; height:480px; }
   .farm-exterior-photo img { width:100%; height:100%; object-fit:cover; object-position:center 40%; display:block; }
-  /* Photo gallery per accommodation - always visible, 2-row grid */
-  .accom-gallery { display:block; margin-top:.6rem; padding:0 1.2rem 1rem; }
+  /* Photo gallery per accommodation - vertical strip on the right */
+  .accom-gallery { display:block; flex-shrink:0; width:100px; padding:0; align-self:stretch; }
   .accom-gallery-inner {
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    display:flex;
+    flex-direction:column;
     gap:5px;
+    height:100%;
   }
   .accom-gallery-inner img,
   .accom-gallery-inner video {
-    width:100%; height:100px;
+    width:100%; flex:1; min-height:60px;
     object-fit:cover;
-    border:1px solid var(--straw);
+    border-left:1.5px solid var(--straw);
     cursor:pointer;
     transition:opacity .2s;
     display:block;
   }
   .accom-gallery-inner img:hover,
   .accom-gallery-inner video:hover { opacity:.85; }
+  @media(max-width:600px) {
+    .accom-gallery { width:70px; }
+  }
 
   /* Lightbox */
   .lightbox { display:none; position:fixed; inset:0; background:rgba(20,12,6,.92); z-index:9999; align-items:center; justify-content:center; flex-direction:column; }
@@ -456,7 +460,7 @@
 
         <!-- ACCOMMODATION -->
         <p class="accom-section-title">Select Accommodation</p>
-        <p class="accom-note" style="margin-top:-.5rem;margin-bottom:1rem;">All bedrooms have one bed for two people. Prices include all meals and full retreat programming.</p>
+        <p class="accom-note" style="margin-top:-.5rem;margin-bottom:1rem;">All bedrooms have one bed for two people.</p>
         <div class="accom-grid" id="accomGrid">
           <!-- rows injected by JS -->
         </div>
@@ -663,7 +667,9 @@
 
       var row = document.createElement('div');
       row.className = 'accom-row' + (isSelected ? ' has-qty' : '') + (soldOut ? ' sold-out' : '');
-      row.style.flexDirection = 'column';
+      row.style.display = 'flex';
+      row.style.flexDirection = 'row';
+      row.style.alignItems = 'stretch';
       row.style.cursor = soldOut ? 'not-allowed' : 'pointer';
       row.style.padding = '0';
       if (soldOut) {
@@ -673,7 +679,7 @@
       }
 
       var top = document.createElement('div');
-      top.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;width:100%;padding:1.1rem 1.2rem 0.6rem;';
+      top.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;flex:1;padding:1.1rem 1.2rem;min-width:0;';
 
       var info = document.createElement('div');
       info.className = 'accom-info';
@@ -698,12 +704,13 @@
       }
       descEl.textContent = item.desc + '  ·  ' + availText;
 
+      
       var priceEl = document.createElement('div');
-      priceEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.9rem;color:var(--clay);margin-top:.3rem;';
+      priceEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:1.05rem;color:var(--clay);margin-top:.3rem;';
       priceEl.innerHTML = 'Single: <strong>$' + item.single + '</strong> &nbsp;·&nbsp; Double: <strong>$' + item.double + '</strong> for 2 people';
 
       var includesEl = document.createElement('div');
-      includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.8rem;color:var(--clay);margin-top:.3rem;';
+      includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.95rem;color:var(--clay);margin-top:.3rem;';
       includesEl.textContent = 'Prices include the room for two nights, all meals from Friday evening to Sunday noon, and full retreat programming.';
 
       info.appendChild(nameEl);
@@ -719,7 +726,7 @@
       top.appendChild(badge);
       row.appendChild(top);
 
-      // Photo gallery
+      // Photo gallery (vertical strip on the right)
       if (photos.length > 0) {
         var gallery = document.createElement('div');
         gallery.className = 'accom-gallery';
