@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Registrations · Radical Rest &amp; Renewal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Lora:ital@0;1&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --soil:#3a2718; --bark:#5a3b28; --clay:#8b5e3c; --wheat:#c9a96e;
+      --straw:#e8d5a3; --cream:#faf6ed; --moss:#3f5230; --sage:#6b8255;
+      --sky:#7aa0bc; --white:#fffef9;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--cream); color:var(--soil); font-family:'Lora',Georgia,serif; padding:2.5rem 1.5rem 5rem; }
+    .wrap { max-width:920px; margin:0 auto; }
+    .eyebrow { font-family:'Crimson Pro',serif; font-size:.75rem; letter-spacing:.32em; text-transform:uppercase; color:var(--clay); margin-bottom:.6rem; }
+    h1 { font-family:'Playfair Display',serif; font-weight:600; font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.1; margin-bottom:.6rem; }
+    h1 em { font-style:italic; color:var(--clay); }
+    .sub { font-family:'Crimson Pro',serif; font-size:1.05rem; color:var(--bark); line-height:1.6; max-width:640px; margin-bottom:2.2rem; }
+
+    /* Gate */
+    .gate { max-width:420px; margin:3rem auto 0; background:var(--white); border:1px solid var(--straw); border-radius:14px; padding:2rem 1.8rem; box-shadow:0 18px 40px -28px rgba(58,39,24,.5); }
+    .gate label { display:block; font-family:'Crimson Pro',serif; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color:var(--clay); margin-bottom:.5rem; }
+    input[type=password] { width:100%; padding:.85rem 1rem; font-family:'Lora',serif; font-size:1rem; color:var(--soil); background:var(--cream); border:1px solid var(--wheat); border-radius:9px; }
+    input[type=password]:focus { outline:none; border-color:var(--clay); }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; cursor:pointer; font-family:'Crimson Pro',serif; font-size:.85rem; letter-spacing:.16em; text-transform:uppercase; border-radius:9px; border:1.5px solid var(--clay); background:var(--clay); color:var(--white); padding:.8rem 1.6rem; transition:background .2s,color .2s,opacity .2s; }
+    .btn:hover { background:var(--bark); border-color:var(--bark); }
+    .btn[disabled] { opacity:.5; cursor:default; }
+    .btn-ghost { background:transparent; color:var(--clay); }
+    .btn-ghost:hover { background:var(--clay); color:var(--white); }
+    .btn-sm { padding:.5rem 1rem; font-size:.72rem; }
+    .gate .btn { width:100%; margin-top:1.1rem; }
+
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1.4rem; }
+    .toolbar .meta { font-family:'Crimson Pro',serif; font-size:.95rem; color:var(--bark); }
+
+    /* Retreat groups */
+    .group { margin-bottom:2.4rem; }
+    .group-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--soil); margin-bottom:.2rem; }
+    .accom-summary { font-family:'Crimson Pro',serif; font-size:.92rem; color:var(--clay); margin-bottom:1rem; display:flex; flex-wrap:wrap; gap:.4rem 1.2rem; }
+    .accom-summary span strong { color:var(--soil); }
+
+    .reg { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; background:var(--white); border:1px solid var(--straw); border-radius:12px; padding:1rem 1.2rem; margin-bottom:.7rem; }
+    .reg-main { min-width:0; }
+    .reg-name { font-family:'Playfair Display',serif; font-size:1.08rem; color:var(--soil); }
+    .reg-line { font-family:'Crimson Pro',serif; font-size:.92rem; color:var(--bark); margin-top:.2rem; line-height:1.5; word-break:break-word; }
+    .reg-line .accom { color:var(--clay); }
+    .tag { display:inline-block; font-family:'Crimson Pro',serif; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; padding:.18rem .55rem; border-radius:999px; margin-left:.4rem; vertical-align:middle; }
+    .tag-cancelled { background:rgba(139,94,60,.12); color:var(--clay); }
+    .reg.is-cancelled { opacity:.6; }
+
+    .empty { font-family:'Crimson Pro',serif; font-style:italic; color:var(--bark); padding:2rem 0; }
+    .note { font-family:'Crimson Pro',serif; font-size:.92rem; line-height:1.6; color:var(--bark); background:var(--white); border-left:3px solid var(--wheat); border-radius:0 10px 10px 0; padding:1rem 1.2rem; margin-bottom:2rem; }
+    .error { color:#9a3b2c; font-family:'Crimson Pro',serif; margin-top:.8rem; min-height:1.2em; }
+    [hidden] { display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Radical Rest &amp; Renewal</div>
+    <h1>Manage <em>registrations</em></h1>
+    <p class="sub">View everyone who has registered and release a room when a registration is cancelled. Cancelling a registration here makes its room available again right away.</p>
+
+    <!-- Password gate -->
+    <div id="gate" class="gate">
+      <label for="pw">Admin password</label>
+      <input type="password" id="pw" autocomplete="current-password" placeholder="Enter password" />
+      <button class="btn" id="unlock">Unlock</button>
+      <div class="error" id="gateError"></div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dash" hidden>
+      <div class="note">
+        Bookings still arrive through the registration form as before. Because Netlify cannot tell this site when a form
+        submission is deleted in the Forms dashboard, deleting a submission there will <strong>not</strong> free its room.
+        To make a room available again, cancel the registration here.
+      </div>
+      <div class="toolbar">
+        <div class="meta" id="meta"></div>
+        <div style="display:flex; gap:.6rem;">
+          <button class="btn btn-ghost btn-sm" id="refresh">Refresh</button>
+          <button class="btn btn-ghost btn-sm" id="lock">Lock</button>
+        </div>
+      </div>
+      <div class="error" id="dashError"></div>
+      <div id="list"></div>
+    </div>
+  </div>
+
+  <script>
+    var KEY = 'rrr_admin_pw';
+    var pw = sessionStorage.getItem(KEY) || '';
+
+    var gate = document.getElementById('gate');
+    var dash = document.getElementById('dash');
+
+    function authHeaders() { return { 'Authorization': 'Bearer ' + pw }; }
+
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+      });
+    }
+
+    function showError(el, msg) { document.getElementById(el).textContent = msg || ''; }
+
+    function unlock() {
+      var val = document.getElementById('pw').value.trim();
+      if (!val) { showError('gateError', 'Please enter the admin password.'); return; }
+      pw = val;
+      load(true);
+    }
+
+    function lock() {
+      sessionStorage.removeItem(KEY);
+      pw = '';
+      dash.hidden = true;
+      gate.hidden = false;
+      document.getElementById('pw').value = '';
+    }
+
+    // Fetch registrations + live availability together, then render.
+    function load(fromGate) {
+      showError('gateError', '');
+      showError('dashError', '');
+      Promise.all([
+        fetch('/api/registrations', { headers: authHeaders(), cache: 'no-store' }),
+        fetch('/api/availability', { cache: 'no-store' })
+      ]).then(function (responses) {
+        var regRes = responses[0];
+        if (regRes.status === 401) {
+          if (!fromGate) { lock(); }
+          return regRes.json().then(function (b) { showError('gateError', b.error || 'Incorrect password.'); throw 'auth'; });
+        }
+        if (regRes.status === 503) {
+          return regRes.json().then(function (b) { showError(fromGate ? 'gateError' : 'dashError', b.error); throw 'config'; });
+        }
+        if (!regRes.ok) throw new Error('Could not load registrations.');
+        return Promise.all([regRes.json(), responses[1].ok ? responses[1].json() : null]);
+      }).then(function (data) {
+        if (!data) return;
+        sessionStorage.setItem(KEY, pw);
+        gate.hidden = true;
+        dash.hidden = false;
+        render(data[0].registrations || [], data[1]);
+      }).catch(function (err) {
+        if (err === 'auth' || err === 'config') return;
+        showError(fromGate ? 'gateError' : 'dashError', err.message || 'Something went wrong.');
+      });
+    }
+
+    function render(regs, availability) {
+      var active = regs.filter(function (r) { return r.status !== 'cancelled'; });
+      document.getElementById('meta').textContent =
+        active.length + (active.length === 1 ? ' active registration' : ' active registrations') +
+        (regs.length !== active.length ? ' · ' + (regs.length - active.length) + ' cancelled' : '');
+
+      // Group by retreat, preserving the order registrations appear in.
+      var order = [];
+      var byRetreat = {};
+      regs.forEach(function (r) {
+        if (!byRetreat[r.retreat]) { byRetreat[r.retreat] = []; order.push(r.retreat); }
+        byRetreat[r.retreat].push(r);
+      });
+
+      var list = document.getElementById('list');
+      list.innerHTML = '';
+
+      if (regs.length === 0) {
+        list.innerHTML = '<div class="empty">No registrations yet.</div>';
+        return;
+      }
+
+      order.forEach(function (retreat) {
+        var group = document.createElement('div');
+        group.className = 'group';
+
+        var title = document.createElement('div');
+        title.className = 'group-title';
+        title.textContent = retreat;
+        group.appendChild(title);
+
+        // Per-accommodation availability summary for this retreat, if known.
+        var avail = availability && availability.byRetreat ? availability.byRetreat[retreat] : null;
+        if (avail) {
+          var summary = document.createElement('div');
+          summary.className = 'accom-summary';
+          Object.keys(avail).forEach(function (name) {
+            var a = avail[name];
+            var s = document.createElement('span');
+            s.innerHTML = escapeHtml(name) + ': <strong>' + a.available + ' / ' + a.capacity + '</strong> open';
+            summary.appendChild(s);
+          });
+          group.appendChild(summary);
+        }
+
+        byRetreat[retreat].forEach(function (r) {
+          group.appendChild(renderRow(r));
+        });
+
+        list.appendChild(group);
+      });
+    }
+
+    function renderRow(r) {
+      var cancelled = r.status === 'cancelled';
+      var row = document.createElement('div');
+      row.className = 'reg' + (cancelled ? ' is-cancelled' : '');
+
+      var main = document.createElement('div');
+      main.className = 'reg-main';
+
+      var name = document.createElement('div');
+      name.className = 'reg-name';
+      name.innerHTML = escapeHtml((r.first_name || '') + ' ' + (r.last_name || '')).trim() +
+        (cancelled ? '<span class="tag tag-cancelled">Cancelled</span>' : '');
+
+      var line1 = document.createElement('div');
+      line1.className = 'reg-line';
+      var occ = Number(r.occupancy) > 1 ? ' · double' : ' · single';
+      line1.innerHTML = '<span class="accom">' + escapeHtml(r.accommodation) + '</span>' + occ;
+
+      var line2 = document.createElement('div');
+      line2.className = 'reg-line';
+      line2.innerHTML = escapeHtml(r.email || '') + (r.phone ? ' · ' + escapeHtml(r.phone) : '');
+
+      main.appendChild(name);
+      main.appendChild(line1);
+      main.appendChild(line2);
+      row.appendChild(main);
+
+      if (!cancelled) {
+        var btn = document.createElement('button');
+        btn.className = 'btn btn-ghost btn-sm';
+        btn.textContent = 'Cancel · free room';
+        btn.onclick = function () { cancelReg(r, btn); };
+        row.appendChild(btn);
+      }
+
+      return row;
+    }
+
+    function cancelReg(r, btn) {
+      var who = ((r.first_name || '') + ' ' + (r.last_name || '')).trim() || 'this registration';
+      if (!confirm('Cancel ' + who + '’s registration for "' + r.accommodation + '"? This frees the room.')) return;
+      btn.disabled = true;
+      btn.textContent = 'Cancelling…';
+      fetch('/api/registrations/' + r.id, { method: 'DELETE', headers: authHeaders() })
+        .then(function (res) {
+          if (!res.ok) return res.json().then(function (b) { throw new Error(b.error || 'Could not cancel.'); });
+          load(false); // reload so availability summary updates
+        })
+        .catch(function (err) {
+          btn.disabled = false;
+          btn.textContent = 'Cancel · free room';
+          showError('dashError', err.message);
+        });
+    }
+
+    document.getElementById('unlock').addEventListener('click', unlock);
+    document.getElementById('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock(); });
+    document.getElementById('refresh').addEventListener('click', function () { load(false); });
+    document.getElementById('lock').addEventListener('click', lock);
+
+    // If a password is already stored from this session, try loading straight away.
+    if (pw) { load(true); }
+  </script>
+</body>
+</html>

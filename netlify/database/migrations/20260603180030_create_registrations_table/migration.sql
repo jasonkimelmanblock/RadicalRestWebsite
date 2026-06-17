@@ -1,0 +1,21 @@
+CREATE TABLE "registrations" (
+	"id" serial PRIMARY KEY,
+	"retreat" text NOT NULL,
+	"accommodation" text NOT NULL,
+	"occupancy" integer DEFAULT 1 NOT NULL,
+	"first_name" text NOT NULL,
+	"last_name" text NOT NULL,
+	"email" text NOT NULL,
+	"phone" text,
+	"guest2_first_name" text,
+	"guest2_last_name" text,
+	"guest2_email" text,
+	"guest2_phone" text,
+	"mattress" text,
+	"how_heard" text,
+	"notes" text,
+	"price" integer,
+	"deposit" integer,
+	"status" text DEFAULT 'confirmed' NOT NULL,
+	"created_at" timestamp DEFAULT now()
+);
