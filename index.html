@@ -293,6 +293,21 @@
   .pillar:hover h3 { color:var(--white); }
   .pillar:hover p  { color:rgba(255,255,240,0.9); }
 
+  /* INFO BOXES below pillars */
+  .info-boxes { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; margin-top:1.5px; background:rgba(201,169,110,.15); }
+  .info-box { background:var(--soil); padding:2.2rem 2rem; position:relative; overflow:hidden; }
+  .info-box h3 { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--wheat); margin-bottom:.55rem; position:relative; z-index:2; }
+  .info-box p { font-family:'Crimson Pro',serif; font-size:1rem; line-height:1.65; color:rgba(232,213,163,.72); position:relative; z-index:2; }
+  .info-box .pillar-photo { position:absolute; inset:0; opacity:0; transition:opacity 0.4s ease; pointer-events:none; }
+  .info-box .pillar-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .info-box .pillar-overlay { position:absolute; inset:0; background:rgba(30,15,5,0.55); opacity:0; transition:opacity 0.4s ease; }
+  .info-box:hover .pillar-photo,
+  .info-box:hover .pillar-overlay { opacity:1; }
+  .info-box:hover h3 { color:var(--white); }
+  .info-box:hover p { color:rgba(255,255,240,0.9); }
+  .experience-note { font-family:'Crimson Pro',serif; font-size:.95rem; font-style:italic; color:rgba(232,213,163,.6); text-align:center; margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(201,169,110,.18); }
+  @media(max-width:860px) { .info-boxes { grid-template-columns:1fr; } }
+
   .farm-exterior-photo { overflow:hidden; height:480px; }
   .farm-exterior-photo img { width:100%; height:100%; object-fit:cover; object-position:center 40%; display:block; }
   /* Photo gallery per accommodation - always visible, 2-row grid */
@@ -402,7 +417,7 @@
         <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 75%;" src="images/05-image.jpg" alt=""></div>
         <div class="pillar-overlay"></div>
         <h3>Disconnect from Technology</h3>
-        <p>Fully, intentionally, joyfully. (A staff member will be on call in case of emergency)</p>
+        <p>Fully. Intentionally. Joyfully.</p>
       </div>
       <div class="pillar">
         <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 90%;" src="images/06-image.jpg" alt=""></div>
@@ -423,7 +438,7 @@
         <p>Conversations on rest, nature, and our relationship with technology</p>
       </div>
       <div class="pillar">
-        <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:20% center;" src="images/09-image.jpg" alt=""></div>
+        <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 40%;" src="images/Nikki_and_Greg.jpg" alt="Retreat participants enjoying the farm"></div>
         <div class="pillar-overlay"></div>
         <h3>Joyful Play</h3>
         <p>Meditate on our dock, exercise, journal, fish, nap, sing, play games, stare at beauty, wander</p>
@@ -432,9 +447,34 @@
         <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 40%;" src="images/10-image.jpg" alt=""></div>
         <div class="pillar-overlay"></div>
         <h3>Home Away from Home</h3>
-        <p>Relax at our eco-friendly farmhouse (or glamping tent!), including nourishing homemade family-style meals and shared experiences</p>
+        <p>Relax at our eco-friendly farmhouse (or glamping tent!)</p>
       </div>
     </div>
+
+    <!-- INFO BOXES: Program, Menu, Intimate by design -->
+    <div class="info-boxes">
+      <div class="info-box">
+        <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 60%;" src="images/Birdhouse.jpg" alt="Birdhouse on the farm"></div>
+        <div class="pillar-overlay"></div>
+        <h3>Program</h3>
+        <p>Your retreat runs from Fri at 4:00pm through Sun at noon. Fri evening and Sun morning are shared group time, while Sat weaves together meaningful group experiences and 4–5 hours of open time where you can choose how to spend it.</p>
+      </div>
+      <div class="info-box">
+        <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center center;" src="images/Peach.jpg" alt="Fresh peach from the orchard"></div>
+        <div class="pillar-overlay"></div>
+        <h3>Menu</h3>
+        <p>Wholesome delicious food is a part of our experience for you. Every meal is made with love in our farmhouse kitchen — fresh and homemade, vegetarian and kosher, with thoughtful accommodations for your dietary needs.</p>
+      </div>
+      <div class="info-box">
+        <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 30%;" src="images/Susan_and_Edna.jpg" alt="Retreat participants in conversation"></div>
+        <div class="pillar-overlay"></div>
+        <h3>Intimate by Design</h3>
+        <p>With an average cohort of 10 participants, there is space for genuine connections and honest conversations with like-minded people.</p>
+      </div>
+    </div>
+
+    <p class="experience-note">In case of emergency — A team member will always have a phone on hand if you need to be reached.</p>
+
   </div>
 </section>
 
@@ -540,7 +580,7 @@
     <div class="inner">
       <h2 class="section-title">About Black Soil Rising Farm</h2>
       <p>14 acres on the Wicomico River in Charles County, MD <br>90 minutes from DC and Richmond</p>
-      <p>Grounded in the belief that human healing and the land's regeneration are deeply intertwined, Black Soil Farm is dedicated to building healthy, carbon-rich soil through sustainable practices that nurture both ecological and human resilience. Come take a walk through the apple, pear, peach and fig orchard.</p>
+      <p>Grounded in the belief that human healing and the land's regeneration are deeply intertwined, Black Soil Farm is dedicated to building healthy, carbon-rich soil through sustainable practices that nurture both ecological and human resilience. Come take a walk through the orchard.</p>
     </div>
   </div>
 </section>

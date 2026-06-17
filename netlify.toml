@@ -1,26 +1,12 @@
-plugins = []
-headers = []
-redirects = []
-
-[functions]
-
-  [functions."*"]
-
 [build]
-publish = "/opt/build/repo"
-publishOrigin = "default"
-base = "/opt/build/repo"
+  publish = "."
 
-  [build.environment]
+[build.processing]
 
-  [build.processing]
+  [build.processing.css]
 
-    [build.processing.css]
+  [build.processing.html]
 
-    [build.processing.html]
+  [build.processing.images]
 
-    [build.processing.images]
-
-    [build.processing.js]
-
-  [build.services]
+  [build.processing.js]
