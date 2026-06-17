@@ -77,7 +77,8 @@
   .experience .section-title { color:var(--straw); }
   .experience .section-title em { color:var(--wheat); }
   .experience > .inner > .lead { font-family:'Crimson Pro',serif; font-size:1.15rem; line-height:1.8; color:rgba(232,213,163,.78); max-width:640px; margin-top:.8rem; }
-  .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; margin-top:3rem; background:rgba(201,169,110,.15); }
+  .pillars-wrap { margin-top:3rem; background:rgba(201,169,110,.15); display:flex; flex-direction:column; gap:1.5px; }
+  .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; background:rgba(201,169,110,.15); }
   .pillar { background:var(--soil); padding:2.2rem 2rem; transition:background .3s; }
   .pillar:hover { background:rgba(255,255,255,.04); }
   .pillar h3 { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--wheat); margin-bottom:.55rem; }
@@ -294,7 +295,7 @@
   .pillar:hover p  { color:rgba(255,255,240,0.9); }
 
   /* INFO BOXES below pillars */
-  .info-boxes { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; margin-top:1.5px; background:rgba(201,169,110,.15); }
+  .info-boxes { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; background:rgba(201,169,110,.15); }
   .info-box { background:var(--soil); padding:2.2rem 2rem; position:relative; overflow:hidden; }
   .info-box h3 { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--wheat); margin-bottom:.55rem; position:relative; z-index:2; }
   .info-box p { font-family:'Crimson Pro',serif; font-size:1rem; line-height:1.65; color:rgba(232,213,163,.72); position:relative; z-index:2; }
@@ -412,6 +413,7 @@
   <div class="inner">
     <h2 class="section-title">What You Will Experience</h2>
     <p class="lead">This transformative retreat is an invitation to heal from modern life's fragmentation. Through ancient wisdom and embodied practices grounded in nature, participants will discover the art of being truly present.</p>
+    <div class="pillars-wrap">
     <div class="pillars">
       <div class="pillar">
         <div class="pillar-photo"><img style="width:100%;height:100%;object-fit:cover;object-position:center 75%;" src="images/05-image.jpg" alt=""></div>
@@ -471,7 +473,8 @@
         <h3>Intimate by Design</h3>
         <p>With an average cohort of 10 participants, there is space for genuine connections and honest conversations with like-minded people.</p>
       </div>
-    </div>
+    </div><!-- /.info-boxes -->
+    </div><!-- /.pillars-wrap -->
 
     <p class="experience-note">In case of emergency — A team member will always have a phone on hand if you need to be reached.</p>
 
