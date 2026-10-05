@@ -517,7 +517,7 @@
         </div>
 
         <div class="accom-total-row" id="totalRow" style="display:none;">
-          <span>Total price</span>
+          <span>Total price (two nights)</span>
           <strong id="guestTotal">—</strong>
         </div>
 
@@ -628,11 +628,16 @@
   });
 
   // Accommodation config with pricing
+  const retreatNights = 2;
   const accomConfig = [
-    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 bed',   max: 1, $250/night, based on double occupancy},
-    { name: 'Bedroom with shared bathroom',  desc: 'Shared bath · 1 bed',    max: 4, $150/night, based on double occupancy },
-    { name: 'Glamping tent',                 desc: 'Outdoor · Meadow views', max: 3, $100/night, based on double occupancy  }
-  ];
+    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 bed',   max: 1, nightly: 250, singleSurcharge: 100 },
+    { name: 'Bedroom with shared bathroom',  desc: 'Shared bath · 1 bed',    max: 4, nightly: 150, singleSurcharge: 75 },
+    { name: 'Glamping tent',                 desc: 'Outdoor · Meadow views', max: 3, nightly: 100, singleSurcharge: 50 }
+  ].map(function(item) {
+    item.single = (item.nightly + item.singleSurcharge) * retreatNights;
+    item.double = item.nightly * 2 * retreatNights;
+    return item;
+  });
 
   let selectedAccom = null;
   let currentOccupancy = 0;
@@ -693,14 +698,13 @@
       }
       descEl.textContent = item.desc + '  ·  ' + availText;
 
-      
       var priceEl = document.createElement('div');
       priceEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:1.05rem;color:var(--clay);margin-top:.3rem;';
-      priceEl.innerHTML = 'Single: <strong>$' + item.single + '</strong> &nbsp;·&nbsp; Double: <strong>$' + item.double + '</strong> for 2 people';
+      priceEl.textContent = '$' + item.nightly + ' a night based on double occupancy';
 
       var includesEl = document.createElement('div');
-      includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.95rem;color:var(--clay);margin-top:.3rem;';
-      includesEl.textContent = 'Prices include all meals from Friday evening to Sunday noon, and full retreat programming. Singles incur a surcharge';
+      includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.95rem;line-height:1.5;color:var(--clay);margin-top:.3rem;';
+      includesEl.textContent = 'Prices are per night based on a two night retreat and include all meals from Friday evening to Sunday noon, and full retreat programming. Singles incur a $' + item.singleSurcharge + '/night surcharge';
 
       info.appendChild(nameEl);
       info.appendChild(descEl);
@@ -769,7 +773,7 @@
     var item = accomConfig.find(function(i) { return i.name === selectedAccom; });
     if (!item) return;
     var price = n === 1 ? item.single : item.double;
-    document.getElementById('priceText').textContent = (n === 1 ? 'Single' : 'Double') + ' occupancy: $' + price;
+    document.getElementById('priceText').textContent = (n === 1 ? 'Single' : 'Double') + ' occupancy: $' + price + ' for two nights';
     document.getElementById('guest2Section').style.display = n === 2 ? 'block' : 'none';
     var isTent = selectedAccom === 'Glamping tent';
     document.getElementById('mattressOption').style.display = (n === 2 && isTent) ? 'block' : 'none';
