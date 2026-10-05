@@ -370,16 +370,6 @@
 
       <!-- DATE CARDS -->
       <div class="dates-grid" id="datesGrid">
-        <div class="date-card" data-retreat="October 9–11, 2026" onclick="selectDate(this)">
-          <p class="date-label">Fall</p>
-          <p class="date-main">October 9–11</p>
-          <p class="date-sub">Friday 4:00pm – Sunday noon</p>
-          <div class="date-avail">
-            <span>1 ensuite bedroom</span>
-            <span>4 shared-bath bedrooms</span>
-            <span>3 glamping tents</span>
-          </div>
-        </div>
         <div class="date-card" data-retreat="December 11–13, 2026" onclick="selectDate(this)">
           <p class="date-label">Winter</p>
           <p class="date-main">December 11–13</p>
@@ -437,7 +427,6 @@
             <label for="retreat-select">Retreat Date</label>
             <select id="retreat-select" name="retreat" onchange="syncDateCard(this.value)">
               <option value="">— Select a date —</option>
-              <option value="October 9–11, 2026">October 9–11, 2026</option>
               <option value="December 11–13, 2026">December 11–13, 2026</option>
             </select>
           </div>
@@ -640,9 +629,9 @@
 
   // Accommodation config with pricing
   const accomConfig = [
-    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 bed',   max: 1, single: 1000, double: 1500 },
-    { name: 'Bedroom with shared bathroom',  desc: 'Shared bath · 1 bed',    max: 4, single: 700,  double: 1000 },
-    { name: 'Glamping tent',                 desc: 'Outdoor · Meadow views', max: 3, single: 500,  double: 800  }
+    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 bed',   max: 1, $250/night, based on double occupancy},
+    { name: 'Bedroom with shared bathroom',  desc: 'Shared bath · 1 bed',    max: 4, $150/night, based on double occupancy },
+    { name: 'Glamping tent',                 desc: 'Outdoor · Meadow views', max: 3, $100/night, based on double occupancy  }
   ];
 
   let selectedAccom = null;
@@ -711,7 +700,7 @@
 
       var includesEl = document.createElement('div');
       includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.95rem;color:var(--clay);margin-top:.3rem;';
-      includesEl.textContent = 'Prices include the room for two nights, all meals from Friday evening to Sunday noon, and full retreat programming.';
+      includesEl.textContent = 'Prices include all meals from Friday evening to Sunday noon, and full retreat programming. Singles incur a surcharge';
 
       info.appendChild(nameEl);
       info.appendChild(descEl);
