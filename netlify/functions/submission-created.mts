@@ -55,7 +55,9 @@ export default async (req: Request, _context: Context) => {
     return new Response("Missing required fields", { status: 200 });
   }
 
-  const occupancy = toInt(d.occupancy) ?? 1;
+  const occupancy = toInt(d.occupancy) === 2 ? 2 : 1;
+  // Calculate the deposit on the server instead of trusting submitted prices.
+  const deposit = 100 * occupancy;
 
   try {
     const db = getDatabase();
@@ -69,7 +71,7 @@ export default async (req: Request, _context: Context) => {
         ${retreat}, ${accommodation}, ${occupancy},
         ${firstName}, ${lastName}, ${email}, ${clean(d.phone)},
         ${clean(d.guest2_first_name)}, ${clean(d.guest2_last_name)}, ${clean(d.guest2_email)}, ${clean(d.guest2_phone)},
-        ${clean(d.mattress)}, ${clean(d.how_heard)}, ${clean(d.notes)}, ${toInt(d.price)}, ${toInt(d.deposit)}
+        ${clean(d.mattress)}, ${clean(d.how_heard)}, ${clean(d.notes)}, ${deposit}, ${deposit}
       )
     `;
     return new Response("Registration stored", { status: 200 });
