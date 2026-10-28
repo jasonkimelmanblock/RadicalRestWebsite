@@ -309,6 +309,18 @@
     .accom-gallery { width:70px; }
   }
 
+  /* Contribution guide */
+  .cost-section { max-width:760px; margin:0 auto 4rem; text-align:left; }
+  .cost-section p { color:var(--bark); font-size:1rem; line-height:1.85; margin-bottom:1.2rem; }
+  .cost-table-wrap { overflow-x:auto; margin:1.5rem 0; border:1px solid var(--straw); }
+  .cost-table { width:100%; min-width:540px; border-collapse:collapse; font-family:'Crimson Pro',serif; font-size:1.05rem; }
+  .cost-table th, .cost-table td { padding:1rem; border-bottom:1px solid var(--straw); text-align:center; }
+  .cost-table thead { background:var(--soil); color:var(--straw); }
+  .cost-table tbody th { text-align:left; color:var(--bark); }
+  .cost-table tbody tr:nth-child(even) { background:var(--white); }
+  .cost-table tbody tr:last-child > * { border-bottom:0; }
+  .cost-table a, .cost-section p a { color:var(--clay); text-underline-offset:3px; }
+
   /* Lightbox */
   .lightbox { display:none; position:fixed; inset:0; background:rgba(20,12,6,.92); z-index:9999; align-items:center; justify-content:center; flex-direction:column; }
   .lightbox.open { display:flex; }
@@ -380,7 +392,57 @@
             <span>3 glamping tents</span>
           </div>
         </div>
+        <div class="date-card" data-retreat="May 21–23, 2027" onclick="selectDate(this)">
+          <p class="date-label">Spring</p>
+          <p class="date-main">May 21–23, 2027</p>
+          <p class="date-sub">Friday 4:00pm – Sunday noon</p>
+          <div class="date-avail">
+            <span>1 ensuite bedroom</span>
+            <span>4 shared-bath bedrooms</span>
+            <span>3 glamping tents</span>
+          </div>
+        </div>
+        <div class="date-card" data-retreat="July 16–18, 2027" onclick="selectDate(this)">
+          <p class="date-label">Summer</p>
+          <p class="date-main">July 16–18, 2027</p>
+          <p class="date-sub">Friday 4:00pm – Sunday noon</p>
+          <div class="date-avail">
+            <span>1 ensuite bedroom</span>
+            <span>4 shared-bath bedrooms</span>
+            <span>3 glamping tents</span>
+          </div>
+        </div>
+        <div class="date-card" data-retreat="Sept 3–5, 2027" onclick="selectDate(this)">
+          <p class="date-label">Late summer</p>
+          <p class="date-main">Sept 3–5, 2027</p>
+          <p class="date-sub">Friday 4:00pm – Sunday noon</p>
+          <div class="date-avail">
+            <span>1 ensuite bedroom</span>
+            <span>4 shared-bath bedrooms</span>
+            <span>3 glamping tents</span>
+          </div>
+        </div>
       </div>
+
+      <section class="cost-section" aria-labelledby="cost-title">
+        <h2 class="section-title" id="cost-title">Cost</h2>
+        <p>Our retreats include lodging, meals, and programming from Friday afternoon through Sunday midday. In a spirit of generosity, we are committed to making this experience accessible to everyone who wishes to join us, recognizing that each person’s financial circumstances are different.</p>
+        <p>To reserve your place, each participant makes a $100 deposit at registration. At the close of the retreat, each participant is invited to contribute an additional amount at a level that feels meaningful to them.</p>
+        <p id="contribution-guide">Suggested contributions per participant, including the deposit, by accommodation:</p>
+        <div class="cost-table-wrap" role="region" aria-labelledby="contribution-guide" tabindex="0">
+          <table class="cost-table" aria-describedby="contribution-guide">
+            <thead><tr><td></td><th scope="col">Glamping tent</th><th scope="col">2nd floor Bedroom, shared bathroom</th><th scope="col">1st floor Bedroom with en suite bathroom</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Supporter</th><td>$500</td><td>$800</td><td>$1,000</td></tr>
+              <tr><th scope="row">Friend</th><td>$350</td><td>$500</td><td>$750</td></tr>
+              <tr><th scope="row">Base</th><td>$200</td><td>$300</td><td>$500</td></tr>
+              <tr><th scope="row">Scholarship</th><td>$100</td><td>$150</td><td>$250</td></tr>
+              <tr><th scope="row">Work-Share</th><td colspan="3">Please <a href="mailto:radicalrestandrenewal@gmail.com">contact us directly</a> to discuss a work-share arrangement.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Groups:</strong> <a href="mailto:radicalrestandrenewal@gmail.com">Contact us</a> about scheduling a dedicated date for a group.</p>
+      </section>
 
       <!-- REGISTRATION FORM -->
       <div class="booking-form-wrap">
@@ -428,6 +490,9 @@
             <select id="retreat-select" name="retreat" onchange="syncDateCard(this.value)">
               <option value="">— Select a date —</option>
               <option value="December 11–13, 2026">December 11–13, 2026</option>
+              <option value="May 21–23, 2027">May 21–23, 2027</option>
+              <option value="July 16–18, 2027">July 16–18, 2027</option>
+              <option value="Sept 3–5, 2027">Sept 3–5, 2027</option>
             </select>
           </div>
           <div class="form-group">
@@ -448,8 +513,6 @@
 
         <!-- ACCOMMODATION -->
         <p class="accom-section-title">Select Accommodation</p>
-        <p class="accom-note" style="margin-top:-.5rem;margin-bottom:.4rem;">For work-trade and other discount options, email <a href="mailto:radicalrestandrenewal@gmail.com" style="color:var(--soil);">radicalrestandrenewal@gmail.com</a></p>
-        <p class="accom-note" style="margin-top:0;margin-bottom:1rem;">All bedrooms have one bed for two people.</p>
         <div class="accom-grid" id="accomGrid">
           <!-- rows injected by JS -->
         </div>
@@ -472,20 +535,20 @@
             </div>
             <div class="form-group" id="priceDisplay" style="margin-bottom:0;align-self:flex-end;">
               <div style="background:var(--straw);padding:.7rem 1rem;font-family:'Crimson Pro',serif;font-size:1.05rem;color:var(--soil);">
-                <span id="priceText">Select occupancy to see price</span>
+                <span id="priceText">Select occupancy to see deposit</span>
               </div>
             </div>
           </div>
 
-          <!-- Glamping tent mattress option -->
+          <!-- Bed preference for ensuite bedrooms and double-occupancy tents -->
           <div id="mattressOption" style="display:none;margin-bottom:1rem;">
-            <label style="font-family:'Crimson Pro',serif;font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--clay);display:block;margin-bottom:.5rem;">Mattress preference</label>
+            <label style="font-family:'Crimson Pro',serif;font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--clay);display:block;margin-bottom:.5rem;" id="bedPreferenceLabel">Bed preference</label>
             <div style="display:flex;gap:1.5rem;">
               <label style="display:flex;align-items:center;gap:.5rem;font-family:'Crimson Pro',serif;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--bark);cursor:pointer;">
-                <input type="radio" name="mattress" value="queen" style="width:auto;border:none;padding:0;background:transparent;"> One Queen mattress
+                <input type="radio" name="mattress" id="bedQueen" value="queen" disabled style="width:auto;border:none;padding:0;background:transparent;"> <span id="bedQueenLabel">One Queen mattress</span>
               </label>
               <label style="display:flex;align-items:center;gap:.5rem;font-family:'Crimson Pro',serif;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--bark);cursor:pointer;">
-                <input type="radio" name="mattress" value="twins" style="width:auto;border:none;padding:0;background:transparent;"> Two Twin mattresses
+                <input type="radio" name="mattress" value="twins" disabled style="width:auto;border:none;padding:0;background:transparent;"> <span id="bedTwinsLabel">Two Twin mattresses</span>
               </label>
             </div>
           </div>
@@ -517,7 +580,7 @@
         </div>
 
         <div class="accom-total-row" id="totalRow" style="display:none;">
-          <span>Total price (two nights)</span>
+          <span>Total registration deposit</span>
           <strong id="guestTotal">—</strong>
         </div>
 
@@ -528,7 +591,7 @@
           <textarea id="background" name="notes" placeholder="Dietary needs, accessibility requirements, intentions for the retreat — share whatever feels relevant."></textarea>
         </div>
 
-        <p class="form-note">A $100 deposit secures your spot and is applied toward the full retreat cost. You will be redirected to a secure Stripe checkout. The remaining balance is due two weeks before your retreat date.</p>
+        <p class="form-note">A $100 deposit per participant reserves your place and counts toward your contribution. Deposit instructions follow by email. At the close of the retreat, you are invited to contribute an additional amount at a level that feels meaningful to you.</p>
 
         <button class="stripe-btn" id="reserveBtn" type="button" onclick="handleBooking()">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -540,7 +603,7 @@
         </button>
         <p class="stripe-notice">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1a5.5 5.5 0 100 11A5.5 5.5 0 006.5 1zm0 2.5a.75.75 0 110 1.5.75.75 0 010-1.5zm0 2.5a.5.5 0 01.5.5v3a.5.5 0 01-1 0v-3a.5.5 0 01.5-.5z" fill="currentColor"/></svg>
-          Secure checkout powered by Stripe. Your card information is never stored on our servers.
+          Your registration is saved securely. Deposit instructions follow by email.
         </p>
         </form>
       </div>
@@ -627,17 +690,13 @@
     if (e.target === this) closeLightbox();
   });
 
-  // Accommodation config with pricing
-  const retreatNights = 2;
+  // Every accommodation has the same deposit per participant.
+  const depositPerParticipant = 100;
   const accomConfig = [
-    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 queen',   max: 1, nightly: 250, singleSurcharge: 100 },
-    { name: 'Bedroom with shared bathroom',  desc: 'Shared bath · 1 bed',    max: 4, nightly: 150, singleSurcharge: 75 },
-    { name: 'Glamping tent',                 desc: 'Outdoor · Meadow views', max: 3, nightly: 100, singleSurcharge: 50 }
-  ].map(function(item) {
-    item.single = (item.nightly + item.singleSurcharge) * retreatNights;
-    item.double = item.nightly * 2 * retreatNights;
-    return item;
-  });
+    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 king / two twins', max: 1 },
+    { name: 'Bedroom with shared bathroom', desc: 'Shared bath · 1 bed', max: 4 },
+    { name: 'Glamping tent', desc: 'Outdoor · Meadow views', max: 3 }
+  ];
 
   let selectedAccom = null;
   let currentOccupancy = 0;
@@ -673,7 +732,7 @@
       }
 
       var top = document.createElement('div');
-      top.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;flex:1;padding:1.1rem 1.2rem;min-width:0;';
+      top.style.cssText = 'display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:.6rem;flex:1;padding:1.1rem 1.2rem;min-width:0;';
 
       var info = document.createElement('div');
       info.className = 'accom-info';
@@ -698,21 +757,11 @@
       }
       descEl.textContent = item.desc + '  ·  ' + availText;
 
-      var priceEl = document.createElement('div');
-      priceEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:1.05rem;color:var(--clay);margin-top:.3rem;';
-      priceEl.textContent = '$' + item.nightly + ' a night per person based on double occupancy';
-
-      var includesEl = document.createElement('div');
-      includesEl.style.cssText = 'font-family:Crimson Pro,serif;font-size:.95rem;line-height:1.5;color:var(--clay);margin-top:.3rem;';
-      includesEl.textContent = 'Prices are per night based on a two night retreat and include all meals from Friday evening to Sunday noon, and full retreat programming. Singles incur a $' + item.singleSurcharge + '/night surcharge';
-
       info.appendChild(nameEl);
       info.appendChild(descEl);
-      info.appendChild(priceEl);
-      info.appendChild(includesEl);
 
       var badge = document.createElement('div');
-      badge.style.cssText = 'flex-shrink:0;font-family:Crimson Pro,serif;font-size:.9rem;color:' + (soldOut ? 'var(--clay)' : (isSelected ? 'var(--clay)' : 'rgba(90,59,40,.4)')) + ';margin-left:1rem;';
+      badge.style.cssText = 'flex-shrink:0;font-family:Crimson Pro,serif;font-size:.9rem;color:' + (soldOut ? 'var(--clay)' : (isSelected ? 'var(--clay)' : 'rgba(90,59,40,.4)')) + ';';
       badge.textContent = soldOut ? 'Sold out' : (isSelected ? '✓ Selected' : 'Select');
 
       top.appendChild(info);
@@ -758,8 +807,8 @@
     currentOccupancy = 0;
     document.querySelectorAll('input[name="occupancy"]').forEach(function(r) { r.checked = false; });
     document.getElementById('guest2Section').style.display = 'none';
-    document.getElementById('mattressOption').style.display = 'none';
-    document.getElementById('priceText').textContent = 'Select occupancy to see price';
+    updateBedPreference();
+    document.getElementById('priceText').textContent = 'Select occupancy to see deposit';
     document.getElementById('occupancyLabel').textContent = 'Occupancy — ' + name;
     document.getElementById('occupancySection').style.display = 'block';
     document.getElementById('totalRow').style.display = 'none';
@@ -772,14 +821,27 @@
     currentOccupancy = n;
     var item = accomConfig.find(function(i) { return i.name === selectedAccom; });
     if (!item) return;
-    var price = n === 1 ? item.single : item.double;
-    document.getElementById('priceText').textContent = (n === 1 ? 'Single' : 'Double') + ' occupancy: $' + price + ' for two nights';
+    var price = depositPerParticipant * n;
+    document.getElementById('priceText').textContent = (n === 1 ? 'Single' : 'Double') + ' occupancy: $' + price + ' deposit';
     document.getElementById('guest2Section').style.display = n === 2 ? 'block' : 'none';
-    var isTent = selectedAccom === 'Glamping tent';
-    document.getElementById('mattressOption').style.display = (n === 2 && isTent) ? 'block' : 'none';
+    updateBedPreference();
     document.getElementById('totalRow').style.display = 'flex';
     document.getElementById('guestTotal').textContent = '$' + price;
     updateReserveBtn();
+  }
+
+  function updateBedPreference() {
+    var isEnsuite = selectedAccom === 'Bedroom with ensuite bathroom';
+    var show = isEnsuite || (selectedAccom === 'Glamping tent' && currentOccupancy === 2);
+    document.getElementById('mattressOption').style.display = show ? 'block' : 'none';
+    document.getElementById('bedPreferenceLabel').textContent = isEnsuite ? 'Bed preference' : 'Mattress preference';
+    document.getElementById('bedQueen').value = isEnsuite ? 'king' : 'queen';
+    document.getElementById('bedQueenLabel').textContent = isEnsuite ? '1 King' : 'One Queen mattress';
+    document.getElementById('bedTwinsLabel').textContent = isEnsuite ? '2 Twin-sized beds' : 'Two Twin mattresses';
+    document.querySelectorAll('input[name="mattress"]').forEach(function(input) {
+      input.checked = false;
+      input.disabled = !show;
+    });
   }
 
   function updateReserveBtn() {
@@ -788,9 +850,7 @@
       label.textContent = 'Reserve My Place';
       return;
     }
-    var item = accomConfig.find(function(i) { return i.name === selectedAccom; });
-    var price = currentOccupancy === 1 ? item.single : item.double;
-    var deposit = 100;
+    var deposit = depositPerParticipant * currentOccupancy;
     label.textContent = 'Reserve My Place — $' + deposit + ' Deposit';
   }
 
@@ -897,10 +957,13 @@
       if (!f2 || !l2) { alert('Please enter the second guest name.'); return; }
       if (!e2 || !e2.includes('@')) { alert('Please enter the second guest email.'); return; }
       if (!p2) { alert('Please enter the second guest phone number.'); return; }
-      if (selectedAccom === 'Glamping tent') {
-        var mattress = document.querySelector('input[name="mattress"]:checked');
-        if (!mattress) { alert('Please select a mattress preference for the glamping tent.'); return; }
-      }
+
+    }
+
+    if (selectedAccom === 'Bedroom with ensuite bathroom' ||
+        (selectedAccom === 'Glamping tent' && currentOccupancy === 2)) {
+      var mattress = document.querySelector('input[name="mattress"]:checked');
+      if (!mattress) { alert('Please select a bed preference.'); return; }
     }
 
     // Guard against booking something that is already fully booked.
@@ -913,9 +976,8 @@
       }
     }
 
-    var item    = accomConfig.find(function(i) { return i.name === selectedAccom; });
-    var price   = currentOccupancy === 1 ? item.single : item.double;
-    var deposit = 100;
+    var deposit = depositPerParticipant * currentOccupancy;
+    var price = deposit;
 
     // Populate hidden fields so they are captured by Netlify Forms.
     document.getElementById('accommodationField').value = selectedAccom;
