@@ -10,8 +10,12 @@ export default async () => {
     const db = getDatabase();
     const counts = await db.sql`
       SELECT retreat, accommodation, COUNT(*)::int AS taken
-      FROM registrations
-      WHERE status <> 'cancelled'
+      FROM (
+        SELECT retreat, accommodation FROM registrations WHERE status <> 'cancelled'
+        UNION ALL
+        SELECT retreat, accommodation FROM registration_checkouts
+        WHERE registration_id IS NULL AND hold_until > now()
+      ) AS occupied
       GROUP BY retreat, accommodation
     `;
 

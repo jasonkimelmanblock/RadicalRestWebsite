@@ -451,10 +451,8 @@
 
         <div class="selected-retreat-notice" id="selectedNotice"></div>
 
-        <!-- Netlify Forms: this form is detected at build time. Submissions are
-             recorded in Netlify Forms and persisted to the Netlify Database by
-             the submission-created function. -->
-        <form id="regForm" name="registration" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <!-- Registration is confirmed by the server only after Stripe payment. -->
+        <form id="regForm" name="registration" method="POST" onsubmit="event.preventDefault(); handleBooking();">
         <input type="hidden" name="form-name" value="registration">
         <input type="hidden" name="accommodation" id="accommodationField">
         <input type="hidden" name="price" id="priceField">
@@ -591,7 +589,7 @@
           <textarea id="background" name="notes" placeholder="Dietary needs, accessibility requirements, intentions for the retreat — share whatever feels relevant."></textarea>
         </div>
 
-        <p class="form-note">A $100 deposit per participant reserves your place and counts toward your contribution. Deposit instructions follow by email. At the close of the retreat, you are invited to contribute an additional amount at a level that feels meaningful to you.</p>
+        <p class="form-note">A $100 deposit per participant reserves your place and counts toward your contribution. Payment through Stripe is required now to complete registration. At the close of the retreat, you are invited to contribute an additional amount at a level that feels meaningful to you.</p>
 
         <button class="stripe-btn" id="reserveBtn" type="button" onclick="handleBooking()">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -603,7 +601,7 @@
         </button>
         <p class="stripe-notice">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1a5.5 5.5 0 100 11A5.5 5.5 0 006.5 1zm0 2.5a.75.75 0 110 1.5.75.75 0 010-1.5zm0 2.5a.5.5 0 01.5.5v3a.5.5 0 01-1 0v-3a.5.5 0 01.5-.5z" fill="currentColor"/></svg>
-          Your registration is saved securely. Deposit instructions follow by email.
+          Secure payment through Stripe. Registration is confirmed only after payment.
         </p>
         </form>
       </div>
@@ -936,6 +934,7 @@
   }
 
   function handleBooking() {
+    if (document.getElementById('reserveBtn').disabled) return;
     var fname   = document.getElementById('fname').value.trim();
     var lname   = document.getElementById('lname').value.trim();
     var email   = document.getElementById('email').value.trim();
@@ -979,7 +978,7 @@
     var deposit = depositPerParticipant * currentOccupancy;
     var price = deposit;
 
-    // Populate hidden fields so they are captured by Netlify Forms.
+    // The server independently calculates the required deposit.
     document.getElementById('accommodationField').value = selectedAccom;
     document.getElementById('priceField').value = price;
     document.getElementById('depositField').value = deposit;
@@ -989,23 +988,20 @@
     var label = document.getElementById('reserveBtnLabel');
     var prevLabel = label.textContent;
     btn.disabled = true;
-    label.textContent = 'Saving your registration…';
+    label.textContent = 'Opening secure payment…';
 
-    // Submit to Netlify Forms. This records the submission and triggers the
-    // submission-created function, which persists the entry to the database.
-    fetch('/', {
+    fetch('/api/checkout', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(form)).toString()
-    }).then(function(res) {
-      if (!res.ok) throw new Error('Submission failed: ' + res.status);
-      showRegistrationSuccess(fname, retreat, selectedAccom, deposit);
-      // Refresh availability so the just-booked room is reflected for others.
-      fetchAvailability();
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(form)))
+    }).then(async function(res) {
+      var data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Unable to open payment.');
+      window.location.assign(data.url);
     }).catch(function(err) {
       btn.disabled = false;
       label.textContent = prevLabel;
-      alert('Something went wrong saving your registration. Please try again.');
+      alert(err.message || 'Unable to open payment. Please try again.');
     });
   }
 
@@ -1018,9 +1014,9 @@
       '<p class="form-subtitle">Thank you, ' + escapeHtml(fname) + '.</p>' +
       '<p style="font-family:Crimson Pro,serif;font-size:1.05rem;line-height:1.7;color:var(--bark);margin-bottom:1rem;">' +
         'Your place for <strong>' + escapeHtml(retreat) + '</strong> in the <strong>' + escapeHtml(accom) + '</strong> has been recorded. ' +
-        'A confirmation will follow by email with next steps for your $' + deposit + ' deposit.' +
+        'Your $' + deposit + ' deposit has been paid through Stripe and your registration is confirmed.' +
       '</p>' +
-      '<p class="form-note">We\'ve saved your details. If you need to make a change, just reply to your confirmation email.</p>';
+      '<p class="form-note">Thank you. Your deposit counts toward your retreat contribution.</p>';
     wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -1032,5 +1028,31 @@
 
   buildAccomGrid();
   fetchAvailability();
+
+  var paymentParams = new URLSearchParams(window.location.search);
+  if (paymentParams.get('session_id')) {
+    var paymentNotice = document.createElement('p');
+    paymentNotice.className = 'form-note';
+    paymentNotice.setAttribute('role', 'status');
+    paymentNotice.textContent = 'Verifying your payment. Please wait before starting another registration.';
+    document.querySelector('.booking-form-wrap').prepend(paymentNotice);
+    document.getElementById('reserveBtn').disabled = true;
+    fetch('/api/checkout?session_id=' + encodeURIComponent(paymentParams.get('session_id')), { cache: 'no-store' })
+      .then(async function(res) {
+        var data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        showRegistrationSuccess(data.firstName, data.retreat, data.accommodation, data.deposit);
+        history.replaceState(null, '', window.location.pathname);
+        fetchAvailability();
+      }).catch(function() {
+        paymentNotice.textContent = 'We could not verify payment yet. Reload this page to retry. If you have paid, please do not pay again; your registration is confirmed automatically once payment is verified.';
+      });
+  } else if (paymentParams.get('payment') === 'cancelled') {
+    var cancelledNotice = document.createElement('p');
+    cancelledNotice.className = 'form-note';
+    cancelledNotice.setAttribute('role', 'status');
+    cancelledNotice.textContent = 'Payment was cancelled. Registration is not complete. You can return to your Stripe Checkout tab to finish; unpaid room holds expire within 35 minutes.';
+    document.querySelector('.booking-form-wrap').prepend(cancelledNotice);
+  }
 </script>
 </body>
