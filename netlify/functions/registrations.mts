@@ -3,18 +3,9 @@
 //   GET    /api/registrations        -> list every registration
 //   DELETE /api/registrations/:id     -> cancel one registration (frees its room)
 //
-// Why this exists: new bookings flow in through Netlify Forms and are mirrored
-// into the `registrations` table by submission-created.mts, which is what
-// /api/availability counts. Netlify Forms does not notify the site when a
-// submission is deleted in the Forms UI, and submissions cannot be read back
-// from the Forms API at runtime — so deletions there can never reach the
-// database, and the booked room stays held forever. This endpoint makes the
-// database (the source of truth for availability) directly manageable, so an
-// administrator can release a room by cancelling its registration here.
-//
-// Cancelling sets status = 'cancelled' rather than deleting the row, so the
-// record is preserved for reference; /api/availability already ignores any row
-// whose status is 'cancelled', so the room becomes available immediately.
+// Paid registrations are created by the verified Stripe payment transaction.
+// Cancelling preserves the registration and releases its room; refunds are
+// managed separately in Stripe.
 import type { Config, Context } from "@netlify/functions";
 import { getDatabase } from "@netlify/database";
 import { createHash, timingSafeEqual } from "node:crypto";
