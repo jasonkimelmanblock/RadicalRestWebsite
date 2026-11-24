@@ -1,0 +1,16 @@
+ALTER TABLE "registrations" ADD COLUMN "guest3_first_name" text;
+ALTER TABLE "registrations" ADD COLUMN "guest3_last_name" text;
+ALTER TABLE "registrations" ADD COLUMN "guest3_email" text;
+ALTER TABLE "registrations" ADD COLUMN "guest3_phone" text;
+ALTER TABLE "registrations" ADD COLUMN "date_of_birth" date;
+ALTER TABLE "registrations" ADD COLUMN "emergency_contact_name" text;
+ALTER TABLE "registrations" ADD COLUMN "emergency_contact_phone" text;
+ALTER TABLE "registrations" ADD COLUMN "dietary_restrictions" text;
+ALTER TABLE "registrations" ADD COLUMN "accommodation_requests" text;
+ALTER TABLE "registrations" ADD COLUMN "medical_conditions" text;
+ALTER TABLE "registrations" ADD COLUMN "motivation" text;
+ALTER TABLE "registrations" ADD COLUMN "questions" text;
+ALTER TABLE "registrations" ADD COLUMN "commit_full_attendance" boolean DEFAULT false NOT NULL;
+ALTER TABLE "registrations" ADD COLUMN "commit_tech_free" boolean DEFAULT false NOT NULL;
+ALTER TABLE "registrations" ADD COLUMN "waiver_accepted" boolean DEFAULT false NOT NULL;
+ALTER TABLE "registrations" ADD COLUMN "waiver_accepted_at" timestamp;

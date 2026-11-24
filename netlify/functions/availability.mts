@@ -9,10 +9,10 @@ export default async () => {
   try {
     const db = getDatabase();
     const counts = await db.sql`
-      SELECT retreat, accommodation, COUNT(*)::int AS taken
+      SELECT retreat, accommodation, occupancy, mattress, COUNT(*)::int AS taken
       FROM registrations
       WHERE status <> 'cancelled'
-      GROUP BY retreat, accommodation
+      GROUP BY retreat, accommodation, occupancy, mattress
     `;
 
     const payload = buildAvailability(counts);
