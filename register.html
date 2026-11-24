@@ -343,6 +343,25 @@
   .register-page .booking-form-wrap { margin-left:auto; margin-right:auto; text-align:center; }
   .register-page .form-group,
   .register-page .form-row { text-align:left; }
+
+  /* Occupancy, commitments and waiver */
+  .choice-list { display:flex; flex-direction:column; gap:.6rem; margin-top:.5rem; text-align:left; }
+  .choice { display:flex; align-items:flex-start; gap:.6rem; font-family:'Crimson Pro',serif; font-size:1.05rem; letter-spacing:0; text-transform:none; color:var(--bark); cursor:pointer; line-height:1.45; }
+  .choice input { width:auto; margin-top:.3rem; flex-shrink:0; accent-color:var(--clay); -webkit-appearance:auto; appearance:auto; }
+  .choice.is-disabled { opacity:.45; cursor:not-allowed; }
+  .occupancy-note { font-family:'Crimson Pro',serif; font-size:1rem; font-style:italic; color:var(--bark); line-height:1.6; margin-bottom:.8rem; text-align:left; }
+  .commitments { text-align:left; margin-bottom:1.5rem; }
+  .waiver { text-align:left; border:1.5px solid var(--straw); background:var(--cream); margin-bottom:1.5rem; }
+  .waiver-head { padding:1.2rem 1.4rem .8rem; border-bottom:1px solid var(--straw); }
+  .waiver-head h4 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--soil); line-height:1.35; margin-bottom:.3rem; }
+  .waiver-head p { font-family:'Crimson Pro',serif; font-style:italic; color:var(--clay); font-size:.98rem; }
+  .waiver-body { max-height:340px; overflow-y:auto; padding:1.2rem 1.4rem; font-family:'Lora',serif; font-size:.92rem; line-height:1.75; color:var(--bark); }
+  .waiver-body h5 { font-family:'Crimson Pro',serif; font-size:.78rem; letter-spacing:.22em; text-transform:uppercase; color:var(--clay); margin:1.3rem 0 .5rem; }
+  .waiver-body p { margin-bottom:.8rem; }
+  .waiver-body ul { padding-left:1.3rem; margin-bottom:.8rem; }
+  .waiver-body li { margin-bottom:.5rem; }
+  .waiver-ack { padding:1.1rem 1.4rem 1.3rem; border-top:1px solid var(--straw); }
+  .waiver-ack > p { font-family:'Crimson Pro',serif; font-size:1rem; color:var(--soil); margin-bottom:.4rem; }
 </style>
 </head>
 <body class="register-page">
@@ -524,12 +543,16 @@
           <div class="form-row" style="margin-bottom:1rem;">
             <div class="form-group" style="margin-bottom:0;">
               <label>Number of guests</label>
-              <div style="display:flex;gap:1.5rem;margin-top:.5rem;">
-                <label style="display:flex;align-items:center;gap:.5rem;font-family:'Crimson Pro',serif;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--bark);cursor:pointer;">
-                  <input type="radio" name="occupancy" value="1" onchange="occupancyChanged(1)" style="width:auto;border:none;padding:0;background:transparent;"> Single occupancy
+              <p class="occupancy-note" id="occupancyNote" style="display:none;margin-top:.4rem;"></p>
+              <div class="choice-list" id="occupancyChoices">
+                <label class="choice" id="occ1Wrap">
+                  <input type="radio" name="occupancy" value="1" onchange="occupancyChanged(1)"> <span id="occ1Label">Single occupancy</span>
                 </label>
-                <label style="display:flex;align-items:center;gap:.5rem;font-family:'Crimson Pro',serif;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--bark);cursor:pointer;">
-                  <input type="radio" name="occupancy" value="2" onchange="occupancyChanged(2)" style="width:auto;border:none;padding:0;background:transparent;"> Double occupancy
+                <label class="choice" id="occ2Wrap">
+                  <input type="radio" name="occupancy" value="2" onchange="occupancyChanged(2)"> <span id="occ2Label">Double occupancy</span>
+                </label>
+                <label class="choice" id="occ3Wrap" style="display:none;">
+                  <input type="radio" name="occupancy" value="3" onchange="occupancyChanged(3)"> <span id="occ3Label">Booking for 3 people</span>
                 </label>
               </div>
             </div>
@@ -543,12 +566,12 @@
           <!-- Bed preference for ensuite bedrooms and double-occupancy tents -->
           <div id="mattressOption" style="display:none;margin-bottom:1rem;">
             <label style="font-family:'Crimson Pro',serif;font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--clay);display:block;margin-bottom:.5rem;" id="bedPreferenceLabel">Bed preference</label>
-            <div style="display:flex;gap:1.5rem;">
-              <label style="display:flex;align-items:center;gap:.5rem;font-family:'Crimson Pro',serif;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--bark);cursor:pointer;">
-                <input type="radio" name="mattress" id="bedQueen" value="queen" disabled style="width:auto;border:none;padding:0;background:transparent;"> <span id="bedQueenLabel">One Queen mattress</span>
+            <div class="choice-list">
+              <label class="choice">
+                <input type="radio" name="mattress" id="bedQueen" value="queen" disabled> <span id="bedQueenLabel">One Queen mattress</span>
               </label>
-              <label style="display:flex;align-items:center;gap:.5rem;font-family:'Crimson Pro',serif;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--bark);cursor:pointer;">
-                <input type="radio" name="mattress" value="twins" disabled style="width:auto;border:none;padding:0;background:transparent;"> <span id="bedTwinsLabel">Two Twin mattresses</span>
+              <label class="choice">
+                <input type="radio" name="mattress" id="bedTwins" value="twins" disabled> <span id="bedTwinsLabel">Two Twin mattresses</span>
               </label>
             </div>
           </div>
@@ -577,6 +600,31 @@
               </div>
             </div>
           </div>
+
+          <!-- Third guest fields (downstairs ensuite bedroom only) -->
+          <div id="guest3Section" style="display:none;">
+            <p class="accom-section-title" style="margin-top:.5rem;">Third Guest Details</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname3">First Name</label>
+                <input type="text" id="fname3" name="guest3_first_name" placeholder="Guest 3 first name">
+              </div>
+              <div class="form-group">
+                <label for="lname3">Last Name</label>
+                <input type="text" id="lname3" name="guest3_last_name" placeholder="Guest 3 last name">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email3">Email Address</label>
+                <input type="email" id="email3" name="guest3_email" placeholder="guest3@example.com">
+              </div>
+              <div class="form-group">
+                <label for="phone3">Phone</label>
+                <input type="tel" id="phone3" name="guest3_phone" placeholder="(___) ___-____">
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="accom-total-row" id="totalRow" style="display:none;">
@@ -586,9 +634,111 @@
 
         <div class="form-divider"></div>
 
+        <!-- ABOUT YOU -->
+        <p class="accom-section-title">About You</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="date_of_birth">
+          </div>
+          <div class="form-group"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ecName">Emergency Contact Name</label>
+            <input type="text" id="ecName" name="emergency_contact_name" placeholder="Full name">
+          </div>
+          <div class="form-group">
+            <label for="ecPhone">Emergency Contact Phone</label>
+            <input type="tel" id="ecPhone" name="emergency_contact_phone" placeholder="(___) ___-____">
+          </div>
+        </div>
         <div class="form-group">
-          <label for="background">Anything you'd like us to know?</label>
-          <textarea id="background" name="notes" placeholder="Dietary needs, accessibility requirements, intentions for the retreat — share whatever feels relevant."></textarea>
+          <label for="dietary">Dietary restrictions (all food is kosher)</label>
+          <textarea id="dietary" name="dietary_restrictions" placeholder="Allergies, intolerances, or other dietary needs"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="accomRequests">Physical or learning accommodations requests</label>
+          <textarea id="accomRequests" name="accommodation_requests" placeholder="Anything that would help you participate fully"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="medical">Medical conditions</label>
+          <textarea id="medical" name="medical_conditions" placeholder="Anything the facilitators should be aware of"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="motivation">What is motivating you to attend the retreat? What do you hope to take away?</label>
+          <textarea id="motivation" name="motivation"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="questions">What questions do you have about the retreat that would be helpful to have addressed ahead of time?</label>
+          <textarea id="questions" name="questions"></textarea>
+        </div>
+
+        <!-- COMMITMENTS -->
+        <div class="commitments">
+          <div class="choice-list">
+            <label class="choice">
+              <input type="checkbox" id="commitAttend" name="commit_full_attendance" value="yes">
+              <span>I commit to attend the retreat in its entirety from 4:00pm Friday until noon on Sunday.</span>
+            </label>
+            <label class="choice">
+              <input type="checkbox" id="commitTech" name="commit_tech_free" value="yes">
+              <span>I commit to do my best to put my computer, phone and smart watches aside for the duration of the retreat. (In case of emergencies, a staff person will be contactable.)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- WAIVER -->
+        <div class="waiver" aria-labelledby="waiverTitle">
+          <div class="waiver-head">
+            <h4 id="waiverTitle">Waiver, Release of Liability, and Assumption of Risk</h4>
+            <p>Please read carefully before completing your registration.</p>
+          </div>
+          <div class="waiver-body" tabindex="0">
+            <p>By registering for a Radical Rest &amp; Renewal retreat hosted at Black Soil Rising Farm (&ldquo;the Retreat&rdquo;), I acknowledge and agree to the following:</p>
+
+            <h5>Assumption of Risk</h5>
+            <p>I understand that participation in the Retreat involves activities that carry inherent risks, including but not limited to:</p>
+            <ul>
+              <li><strong>Waterfront and water-related activities</strong> near the Wicomico River, including walking along riverbanks, dock access, and proximity to open water;</li>
+              <li><strong>Farm and outdoor terrain</strong>, including uneven ground, farm equipment, animals, insects, and natural obstacles across 14 acres of rural property;</li>
+              <li><strong>Physical activities</strong> such as walking, hiking, yoga, and other movement practices that may take place on outdoor terrain;</li>
+              <li><strong>Technology-free and contemplative practices</strong>, including periods of extended silence, solitude, mindfulness exercises, and emotional processing that may surface unexpected personal responses.</li>
+            </ul>
+            <p>I voluntarily assume all risks associated with these and any other activities offered during the Retreat, whether or not such risks are described above.</p>
+
+            <h5>Waiver and Release of Liability</h5>
+            <p>In consideration of being permitted to participate in the Retreat, I, on behalf of myself and my heirs, personal representatives, and assigns, hereby release, waive, discharge, and covenant not to sue Radical Rest and Renewal, Rabbi Jason Kimelman-Block, Devora Kimelman-Block, Black Soil Rising Farm, Rabbi JKB LLC, and their respective officers, agents, employees, volunteers, and representatives (collectively, &ldquo;Released Parties&rdquo;) from any and all claims, demands, damages, losses, or causes of action arising out of or in connection with my participation in the Retreat, including claims arising from the negligence of the Released Parties, to the fullest extent permitted by law.</p>
+
+            <h5>Medical Disclosure and Fitness to Participate</h5>
+            <p>I represent that I am in adequate physical and mental health to participate in the Retreat. I agree to inform the facilitators of any medical conditions, physical limitations, allergies, or mental health concerns that may affect my participation or require accommodation. I understand that the Retreat does not provide medical, psychiatric, or therapeutic services, and that facilitators are not licensed healthcare providers.</p>
+
+            <h5>Emergency Authorization</h5>
+            <p>In the event of a medical emergency, I authorize the Released Parties to seek emergency medical treatment on my behalf. I agree to be responsible for any costs associated with such treatment.</p>
+          </div>
+          <div class="waiver-ack">
+            <p><strong>Acknowledgment.</strong> By completing registration and submitting payment, I confirm that:</p>
+            <div class="choice-list">
+              <label class="choice">
+                <input type="checkbox" class="waiver-check" name="waiver_read_understood" value="yes">
+                <span>I have read and understood this agreement in its entirety;</span>
+              </label>
+              <label class="choice">
+                <input type="checkbox" class="waiver-check" name="waiver_adult" value="yes">
+                <span>I am 18 years of age or older;</span>
+              </label>
+              <label class="choice">
+                <input type="checkbox" class="waiver-check" name="waiver_voluntary" value="yes">
+                <span>I am signing voluntarily and freely, without duress or undue influence;</span>
+              </label>
+              <label class="choice">
+                <input type="checkbox" class="waiver-check" name="waiver_maryland_law" value="yes">
+                <span>This agreement shall be governed by the laws of the State of Maryland.</span>
+              </label>
+            </div>
+          </div>
         </div>
 
         <p class="form-note">A $100 deposit per participant reserves your place and counts toward your contribution. Deposit instructions follow by email. At the close of the retreat, you are invited to contribute an additional amount at a level that feels meaningful to you.</p>
@@ -635,7 +785,8 @@
     'Bedroom with ensuite bathroom': [
       'images/bedroom-ensuite-1.jpg',
       'images/bedroom-ensuite-2.jpg',
-      'images/bedroom-ensuite-3.jpg'
+      'images/bedroom-ensuite-3.jpg',
+      'images/bedroom-ensuite-4.jpg'
     ],
     'Bedroom with shared bathroom': [
       'images/bedroom-shared-1.jpg',
@@ -692,11 +843,30 @@
 
   // Every accommodation has the same deposit per participant.
   const depositPerParticipant = 100;
+  // `name` is the stored booking key (kept stable so existing bookings still
+  // count against availability); `label` is what guests see.
+  const ENSUITE = 'Bedroom with ensuite bathroom';
+  const SHARED_SINGLE_BED = 'single bed (shared room)';
   const accomConfig = [
-    { name: 'Bedroom with ensuite bathroom', desc: 'Private bath · 1 king / two twins', max: 1 },
-    { name: 'Bedroom with shared bathroom', desc: 'Shared bath · 1 bed', max: 4 },
-    { name: 'Glamping tent', desc: 'Outdoor · Meadow views', max: 3 }
+    { name: ENSUITE, label: 'Downstairs bedroom with ensuite bathroom', desc: 'Private bath · 1 queen / two twins', max: 3, rooms: 1, maxGuests: 3 },
+    { name: 'Bedroom with shared bathroom', label: 'Upstairs bedroom with shared bathroom', desc: 'Shared bath · 1 bed', max: 4, rooms: 4, maxGuests: 2 },
+    { name: 'Glamping tent', label: 'Glamping tent', desc: 'Outdoor · Meadow views', max: 3, rooms: 3, maxGuests: 2 }
   ];
+  function accomLabel(name) {
+    var item = accomConfig.find(function(i) { return i.name === name; });
+    return item ? item.label : name;
+  }
+  // Remaining availability for an accommodation on the selected date, or null.
+  function liveAvail(name) {
+    var retreatVal = document.getElementById('retreat-select').value;
+    return (availabilityData && retreatVal && availabilityData.byRetreat[retreatVal])
+      ? availabilityData.byRetreat[retreatVal][name] : null;
+  }
+  // The ensuite can be booked whole (2–3 guests) only while no bed is taken.
+  function ensuiteWholeRoomFree() {
+    var a = liveAvail(ENSUITE);
+    return !a || a.available >= a.capacity;
+  }
 
   let selectedAccom = null;
   let currentOccupancy = 0;
@@ -739,16 +909,21 @@
 
       var nameEl = document.createElement('div');
       nameEl.className = 'accom-name';
-      nameEl.textContent = item.name;
+      nameEl.textContent = item.label;
 
       var descEl = document.createElement('div');
       descEl.className = 'accom-desc';
       var availText;
       if (!retreatVal) {
         // No date chosen yet — show total capacity.
-        availText = capacity + (capacity === 1 ? ' room' : ' rooms') + ' total';
+        availText = item.rooms + (item.rooms === 1 ? ' room' : ' rooms') + ' total';
       } else if (soldOut) {
         availText = 'Fully booked for this date';
+      } else if (item.name === ENSUITE) {
+        // Tracked by bed: a solo guest may already be sharing the room.
+        availText = remaining >= capacity
+          ? 'Available'
+          : remaining + (remaining === 1 ? ' bed' : ' beds') + ' available in a shared room';
       } else if (capacity > 1) {
         // Multiple-option accommodations show how many remain out of capacity.
         availText = remaining + ' of ' + capacity + ' rooms still available';
@@ -786,7 +961,7 @@
           } else {
             thumb = document.createElement('img');
             thumb.src = src;
-            thumb.alt = item.name + ' photo ' + (i+1);
+            thumb.alt = item.label + ' photo ' + (i+1);
           }
           thumb.onclick = function(e) {
             e.stopPropagation();
@@ -807,9 +982,11 @@
     currentOccupancy = 0;
     document.querySelectorAll('input[name="occupancy"]').forEach(function(r) { r.checked = false; });
     document.getElementById('guest2Section').style.display = 'none';
+    document.getElementById('guest3Section').style.display = 'none';
+    updateOccupancyOptions();
     updateBedPreference();
     document.getElementById('priceText').textContent = 'Select occupancy to see deposit';
-    document.getElementById('occupancyLabel').textContent = 'Occupancy — ' + name;
+    document.getElementById('occupancyLabel').textContent = 'Occupancy — ' + accomLabel(name);
     document.getElementById('occupancySection').style.display = 'block';
     document.getElementById('totalRow').style.display = 'none';
     buildAccomGrid();
@@ -822,22 +999,64 @@
     var item = accomConfig.find(function(i) { return i.name === selectedAccom; });
     if (!item) return;
     var price = depositPerParticipant * n;
-    document.getElementById('priceText').textContent = (n === 1 ? 'Single' : 'Double') + ' occupancy: $' + price + ' deposit';
-    document.getElementById('guest2Section').style.display = n === 2 ? 'block' : 'none';
+    document.getElementById('priceText').textContent = n + (n === 1 ? ' guest' : ' guests') + ': $' + price + ' deposit';
+    document.getElementById('guest2Section').style.display = n >= 2 ? 'block' : 'none';
+    document.getElementById('guest3Section').style.display = n >= 3 ? 'block' : 'none';
     updateBedPreference();
     document.getElementById('totalRow').style.display = 'flex';
     document.getElementById('guestTotal').textContent = '$' + price;
     updateReserveBtn();
   }
 
+  // Show the guest-count options that apply to the selected accommodation.
+  function updateOccupancyOptions() {
+    var isEnsuite = selectedAccom === ENSUITE;
+    var wholeFree = ensuiteWholeRoomFree();
+    var note = document.getElementById('occupancyNote');
+    if (isEnsuite) {
+      note.textContent = 'Can accommodate 1–3 guests. Book the whole room for two guests, or reserve a single bed and share the room with others.' +
+        (wholeFree ? '' : ' A bed in this room is already reserved for this date, so only single-bed bookings are open.');
+      note.style.display = 'block';
+    } else {
+      note.style.display = 'none';
+    }
+    document.getElementById('occ1Label').textContent = isEnsuite ? 'Booking for 1 person — shared room, single bed' : 'Single occupancy';
+    document.getElementById('occ2Label').textContent = isEnsuite ? 'Booking for 2 people — choose 1 queen or 2 single beds' : 'Double occupancy';
+    document.getElementById('occ3Label').textContent = 'Booking for 3 people — choose 1 queen + 1 single or 3 singles';
+    document.getElementById('occ3Wrap').style.display = isEnsuite ? 'flex' : 'none';
+    [2, 3].forEach(function(n) {
+      var wrap = document.getElementById('occ' + n + 'Wrap');
+      var input = wrap.querySelector('input');
+      var disabled = isEnsuite && !wholeFree;
+      input.disabled = disabled;
+      wrap.classList.toggle('is-disabled', disabled);
+      if (disabled && input.checked) input.checked = false;
+    });
+  }
+
   function updateBedPreference() {
-    var isEnsuite = selectedAccom === 'Bedroom with ensuite bathroom';
-    var show = isEnsuite || (selectedAccom === 'Glamping tent' && currentOccupancy === 2);
+    var isEnsuite = selectedAccom === ENSUITE;
+    var show = (isEnsuite && currentOccupancy >= 2) || (selectedAccom === 'Glamping tent' && currentOccupancy === 2);
+    var queen = document.getElementById('bedQueen');
+    var twins = document.getElementById('bedTwins');
     document.getElementById('mattressOption').style.display = show ? 'block' : 'none';
     document.getElementById('bedPreferenceLabel').textContent = isEnsuite ? 'Bed preference' : 'Mattress preference';
-    document.getElementById('bedQueen').value = isEnsuite ? 'king' : 'queen';
-    document.getElementById('bedQueenLabel').textContent = isEnsuite ? '1 King' : 'One Queen mattress';
-    document.getElementById('bedTwinsLabel').textContent = isEnsuite ? '2 Twin-sized beds' : 'Two Twin mattresses';
+    if (isEnsuite && currentOccupancy === 3) {
+      queen.value = 'queen + single';
+      twins.value = 'three singles';
+      document.getElementById('bedQueenLabel').textContent = '1 queen + 1 single';
+      document.getElementById('bedTwinsLabel').textContent = '3 singles';
+    } else if (isEnsuite) {
+      queen.value = 'queen';
+      twins.value = 'two singles';
+      document.getElementById('bedQueenLabel').textContent = '1 queen';
+      document.getElementById('bedTwinsLabel').textContent = '2 single beds';
+    } else {
+      queen.value = 'queen';
+      twins.value = 'twins';
+      document.getElementById('bedQueenLabel').textContent = 'One Queen mattress';
+      document.getElementById('bedTwinsLabel').textContent = 'Two Twin mattresses';
+    }
     document.querySelectorAll('input[name="mattress"]').forEach(function(input) {
       input.checked = false;
       input.disabled = !show;
@@ -892,7 +1111,24 @@
         updateReserveBtn();
       }
     }
+    refreshEnsuiteOptions();
     buildAccomGrid();
+  }
+
+  // Re-evaluate whole-room options for the ensuite after availability changes.
+  function refreshEnsuiteOptions() {
+    if (selectedAccom !== ENSUITE) return;
+    var hadOcc = currentOccupancy;
+    updateOccupancyOptions();
+    if (hadOcc >= 2 && !ensuiteWholeRoomFree()) {
+      currentOccupancy = 0;
+      document.getElementById('guest2Section').style.display = 'none';
+      document.getElementById('guest3Section').style.display = 'none';
+      document.getElementById('priceText').textContent = 'Select occupancy to see deposit';
+      document.getElementById('totalRow').style.display = 'none';
+      updateBedPreference();
+      updateReserveBtn();
+    }
   }
 
   // Fetch live room availability from the database-backed API and re-render.
@@ -902,6 +1138,7 @@
       .then(function(data) {
         if (!data) return;
         availabilityData = data;
+        refreshEnsuiteOptions();
         buildAccomGrid();
         updateDateCards();
       })
@@ -912,7 +1149,11 @@
   function updateDateCards() {
     if (!availabilityData) return;
     var labels = {
-      'Bedroom with ensuite bathroom': function(n) { return n + ' ensuite bedroom' + (n === 1 ? '' : 's'); },
+      'Bedroom with ensuite bathroom': function(n, cap) {
+        if (n >= cap) return '1 ensuite bedroom';
+        if (n <= 0) return '0 ensuite bedrooms';
+        return n + ' ensuite bed' + (n === 1 ? '' : 's') + ' (shared room)';
+      },
       'Bedroom with shared bathroom':  function(n) { return n + ' shared-bath bedroom' + (n === 1 ? '' : 's'); },
       'Glamping tent':                 function(n) { return n + ' glamping tent' + (n === 1 ? '' : 's'); }
     };
@@ -924,8 +1165,9 @@
       var totalLeft = 0;
       Object.keys(labels).forEach(function(name) {
         var n = byA[name] ? byA[name].available : 0;
+        var cap = byA[name] ? byA[name].capacity : 0;
         totalLeft += n;
-        html += '<span' + (n <= 0 ? ' style="text-decoration:line-through;opacity:.55;"' : '') + '>' + labels[name](n) + '</span>';
+        html += '<span' + (n <= 0 ? ' style="text-decoration:line-through;opacity:.55;"' : '') + '>' + labels[name](n, cap) + '</span>';
       });
       if (totalLeft <= 0) {
         html += '<span style="color:var(--clay);font-style:italic;">Fully booked</span>';
@@ -947,9 +1189,9 @@
     if (!phone) { alert('Please enter your phone number.'); return; }
     if (!retreat) { alert('Please select a retreat date.'); return; }
     if (!selectedAccom) { alert('Please select an accommodation.'); return; }
-    if (!currentOccupancy) { alert('Please select single or double occupancy.'); return; }
+    if (!currentOccupancy) { alert('Please select the number of guests.'); return; }
 
-    if (currentOccupancy === 2) {
+    if (currentOccupancy >= 2) {
       var f2 = document.getElementById('fname2').value.trim();
       var l2 = document.getElementById('lname2').value.trim();
       var e2 = document.getElementById('email2').value.trim();
@@ -957,20 +1199,44 @@
       if (!f2 || !l2) { alert('Please enter the second guest name.'); return; }
       if (!e2 || !e2.includes('@')) { alert('Please enter the second guest email.'); return; }
       if (!p2) { alert('Please enter the second guest phone number.'); return; }
-
     }
 
-    if (selectedAccom === 'Bedroom with ensuite bathroom' ||
+    if (currentOccupancy === 3) {
+      var f3 = document.getElementById('fname3').value.trim();
+      var l3 = document.getElementById('lname3').value.trim();
+      var e3 = document.getElementById('email3').value.trim();
+      var p3 = document.getElementById('phone3').value.trim();
+      if (!f3 || !l3) { alert('Please enter the third guest name.'); return; }
+      if (!e3 || !e3.includes('@')) { alert('Please enter the third guest email.'); return; }
+      if (!p3) { alert('Please enter the third guest phone number.'); return; }
+    }
+
+    if ((selectedAccom === ENSUITE && currentOccupancy >= 2) ||
         (selectedAccom === 'Glamping tent' && currentOccupancy === 2)) {
       var mattress = document.querySelector('input[name="mattress"]:checked');
       if (!mattress) { alert('Please select a bed preference.'); return; }
     }
 
+    if (selectedAccom === ENSUITE && currentOccupancy >= 2 && !ensuiteWholeRoomFree()) {
+      alert('Sorry — a bed in the downstairs bedroom is already reserved for this date, so it can only be booked as a single bed.');
+      return;
+    }
+
+    if (!document.getElementById('dob').value) { alert('Please enter your date of birth.'); return; }
+    if (!document.getElementById('ecName').value.trim() || !document.getElementById('ecPhone').value.trim()) {
+      alert('Please enter an emergency contact name and phone number.'); return;
+    }
+    if (!document.getElementById('commitAttend').checked || !document.getElementById('commitTech').checked) {
+      alert('Please confirm both retreat commitments.'); return;
+    }
+    var unchecked = Array.prototype.some.call(document.querySelectorAll('.waiver-check'), function(c) { return !c.checked; });
+    if (unchecked) { alert('Please read the waiver and check every acknowledgment to complete your registration.'); return; }
+
     // Guard against booking something that is already fully booked.
     if (availabilityData && availabilityData.byRetreat[retreat]) {
       var liveInfo = availabilityData.byRetreat[retreat][selectedAccom];
       if (liveInfo && liveInfo.available <= 0) {
-        alert('Sorry — ' + selectedAccom + ' is fully booked for ' + retreat + '. Please choose another accommodation or date.');
+        alert('Sorry — ' + accomLabel(selectedAccom) + ' is fully booked for ' + retreat + '. Please choose another accommodation or date.');
         fetchAvailability();
         return;
       }
@@ -999,7 +1265,7 @@
       body: new URLSearchParams(new FormData(form)).toString()
     }).then(function(res) {
       if (!res.ok) throw new Error('Submission failed: ' + res.status);
-      showRegistrationSuccess(fname, retreat, selectedAccom, deposit);
+      showRegistrationSuccess(fname, retreat, accomLabel(selectedAccom), deposit);
       // Refresh availability so the just-booked room is reflected for others.
       fetchAvailability();
     }).catch(function(err) {

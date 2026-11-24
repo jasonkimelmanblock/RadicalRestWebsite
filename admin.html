@@ -222,7 +222,8 @@
 
       var line1 = document.createElement('div');
       line1.className = 'reg-line';
-      var occ = Number(r.occupancy) > 1 ? ' · double' : ' · single';
+      var n = Number(r.occupancy) || 1;
+      var occ = ' · ' + n + (n === 1 ? ' guest' : ' guests');
       line1.innerHTML = '<span class="accom">' + escapeHtml(r.accommodation) + '</span>' + occ;
 
       var line2 = document.createElement('div');
